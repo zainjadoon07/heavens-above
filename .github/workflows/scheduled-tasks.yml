@@ -29,6 +29,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add logs/maintenance.log
+          git add -f logs/maintenance.log
           git commit -m " Daily maintenance log update [skip ci]" || echo "No changes to commit"
           git push
