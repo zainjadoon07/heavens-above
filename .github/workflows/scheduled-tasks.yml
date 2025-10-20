@@ -1,0 +1,34 @@
+name: Scheduled Maintenance Task
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:  
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Run maintenance script
+        run: |
+          echo "Running daily maintenance task..."
+          mkdir -p logs
+          echo "Maintenance task ran at $(date)" >> logs/maintenance.log
+          echo "Maintenance completed successfully!"
+
+      - name: Commit & Push maintenance log
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add logs/maintenance.log
+          git commit -m "🧹 Daily maintenance log update [skip ci]" || echo "No changes to commit"
+          git push
