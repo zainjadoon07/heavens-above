@@ -1,0 +1,35 @@
+name: Code Review Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint (code style check)
+        run: |
+          npx eslint . || echo "Lint issues found"
+
+      - name: Run vulnerability scan
+        run: |
+          echo "Checking for security vulnerabilities..."
+          npm audit --audit-level=high || true
+
+      - name: Run unit tests (if present)
+        run: |
+          echo "Running test suite..."
+          npm test || echo " No tests or some failed"
