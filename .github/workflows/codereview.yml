@@ -3,6 +3,7 @@ name: Code Review Checks
 on:
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   review:
@@ -29,7 +30,7 @@ jobs:
           echo "Checking for security vulnerabilities..."
           npm audit --audit-level=high || true
 
-      - name: Run unit tests (if present)
+      - name: Run unit tests 
         run: |
           echo "Running test suite..."
           npm test || echo " No tests or some failed"
